@@ -285,13 +285,13 @@ Each milestone adds one web-server idea and ends with something you can run and 
 | --- | --- | --- | --- |
 | 0 | Tiny server with Python's `http.server`, no framework | What a request and response really are | `curl -v localhost:8000` shows your headers and body |
 | 1 | FastAPI hello world plus a Jinja2 page | Routing, templates, status codes | A browser shows a page listing 12 fake teams |
-| 2 | SQLite tables and a player search | SQL, query parameters, HTML forms | Typing "sot" lists matching players |
+| 2 | SQLite tables (with fake projections) and the Players page | SQL, query parameters, HTML forms | `/players?pos=SS&sort=HR` lists shortstops by projected HR, and typing "sot" finds matching players |
 | 3 | Team list, PIN sign-in and sessions | Cookies, redirects, password hashing, rate limiting, auth checks, `401` / `403` | Two browsers are signed in as two different teams |
-| 4 | ULTRA picks with the event log | POST handlers, transactions, event sourcing | Picks survive stopping and restarting the server |
-| 5 | Live updates over SSE | Long-lived responses, broadcasting to many clients | A pick in one browser appears in the other instantly |
+| 4 | ULTRA picks with the event log, plus the Teams and History pages | POST handlers, transactions, event sourcing | Picks survive stopping and restarting the server, and show on Teams and History |
+| 5 | Live updates over SSE, the shared top bar and the player popup | Long-lived responses, broadcasting to many clients, fetching HTML fragments with JavaScript | A pick in one browser appears in the other instantly, on every page |
 | 6 | The auction and its server timer | Background tasks, concurrency, locks | Two browsers bid against each other, and the timer sells the lot |
-| 7 | Rules module with tests | Keeping logic separate from HTTP, `pytest` | League rules are enforced, with a test for each |
-| 8 | OnRoto login and importer | Being an HTTP *client*: form POSTs, cookies, redirects, parsing HTML | One click logs in to OnRoto, and real keepers and contracts load and review cleanly |
+| 7 | Rules module with tests | Keeping logic separate from HTTP, `pytest` | League rules, including position eligibility ("Position unavailable"), are enforced, with a test for each |
+| 8 | OnRoto login and importer | Being an HTTP *client*: form POSTs, cookies, redirects, parsing HTML | One click logs in to OnRoto, and real keepers, contracts and projections load and review cleanly |
 | 9 | systemd plus Cloudflare Tunnel | Reverse proxies, TLS, services, logs | A friend on another network signs in and bids |
 | 10 | Commissioner tools, polish, mock draft | Admin authorization, UX testing | A full mock draft with real managers works |
 
