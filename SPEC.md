@@ -297,6 +297,35 @@ Each milestone adds one web-server idea and ends with something you can run and 
 
 **How we'll work:** I write most of the code and explain it as we go. You write pieces yourself when you want the practice, and no code goes in until you understand it. At each milestone, look at the raw HTTP traffic in the browser's DevTools Network tab and with `curl -v`, so the framework never feels like magic.
 
+## Testing
+
+Most tests are fast unit tests of plain Python, a fair number exercise real HTTP requests, and a few checks happen by hand in a real browser. Tests use `pytest`, and a test is the "predict" step of each lesson written down.
+
+- **Unit tests (most):** plain functions with no server or network. They cover the rules (`can_bid` returns OK or a reason such as "Max bid $4" or "Position unavailable"), event replay (events in, draft state out, which also covers crash recovery and undo), the OnRoto parser on saved sample pages, and the CSV export (BOM, escaped `=` cells, an accented name like Acuña).
+- **Integration tests (some):** FastAPI's `TestClient` sends real requests straight into the app with a fresh temporary database, and checks status codes, headers and cookies. Examples: a wrong PIN gives `401`; a right PIN gives `303` with `Set-Cookie`; a rule-breaking bid gives `409` with its reason; a pick survives rebuilding the app on the same database file.
+- **End-to-end (few, by hand):** a real server with `curl -v`, two browser windows bidding against each other, then the mock draft. Browser automation (Playwright) is a heavy dependency, so we decide on it in Milestone 10.
+
+**Two design choices keep the code testable:**
+
+1. **The rules module never touches HTTP or the database.** It takes the current state and an action and returns a decision, so every league rule can have its own test.
+2. **The timer takes its time from a clock we pass in.** Tests use a fake clock and move it forward by hand ("advance 30 seconds, the lot is sold"), so timer tests run instantly and give the same result every time.
+
+| # | What we test | Kind |
+| --- | --- | --- |
+| 0 | The handler returns the right status line, headers and body | Unit, plus `curl -v` |
+| 1 | Routes return `200` / `404`, and the page lists 12 teams | Integration |
+| 2 | Filter and sort SQL, and a name in a search can't break the SQL | Unit and integration |
+| 3 | PIN hashing, lockout after 5 tries, cookie flags, `401` / `403` | Unit and integration |
+| 4 | Replaying events rebuilds the state, undo works, picks survive a restart | Unit and integration |
+| 5 | `/events` sends the right `event:` / `data:` lines, and reconnecting with `Last-Event-ID` replays missed events | Integration, plus `curl -N` |
+| 6 | The fake-clock timer sells the lot, late bids are rejected, two bids at the same instant are handled one at a time | Unit and integration |
+| 7 | Every league rule, including "Position unavailable" | Unit, the biggest set |
+| 8 | Parsing saved sample pages (session IDs removed), and spotting a failed login | Unit |
+| 9 | The site works from a phone on cellular data | Manual |
+| 10 | A full mock draft | Manual |
+
+In the step-by-step loop, the user gets a failing test before writing a piece themselves, and reads the tests first for pieces Claude writes.
+
 ## Open questions
 
 - [ ] Salary cap amount, minimum salary, and what "well under the cap" means before the draft

@@ -1,0 +1,17 @@
+# Secrets: OnRoto login and the commissioner password hash
+.env
+
+# The live database and SQLite's side files (WAL mode)
+draft.db
+draft.db-wal
+draft.db-shm
+
+# Database backups taken during the draft
+backups/
+
+# Raw OnRoto HTML saved by the importer (pages can contain session links)
+imports/
+
+# Python clutter
+__pycache__/
+.venv/

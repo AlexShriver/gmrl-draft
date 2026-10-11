@@ -15,6 +15,34 @@ The user (the league commissioner, also a manager) is building this mainly to le
 - **Offer, don't impose:** when a piece is a good one for the user to write themselves, say so and let them choose.
 - **Prefer explicit over magic:** raw SQL with `sqlite3` rather than an ORM, plain JavaScript rather than a frontend framework. Explain any new dependency before adding it.
 - **Show how to observe it:** suggest `curl -v`, `curl -N` (for SSE) or the browser's DevTools Network tab to see what's actually on the wire.
+- **Boring over clever:** plain, readable code. Comments explain *why*, not *what*.
+
+### The loop for every step
+
+1. **Concept first:** explain the idea in a few sentences, including what goes over the wire, before writing code.
+2. **User predicts:** ask what they expect to see (curl output, status code, database row). Wrong guesses are the point; use them to show where to look.
+3. **Small step:** one function or route, roughly 20–60 lines. Never a whole feature at once.
+4. **Walk-through:** go through the code line by line, then have the user explain it back or answer 2–3 questions. Stop if anything is fuzzy.
+5. **Run and observe:** `curl -v`, the DevTools Network tab or `sqlite3 draft.db`, and compare with the prediction.
+6. **Break it on purpose:** remove the cookie, send a bad PIN, kill the server mid-bid. The user predicts the failure, then checks it.
+7. **Commit:** the user reads the diff and writes the commit message. If it doesn't fit in one line, the step was too big.
+
+### Pieces to offer the user
+
+Give a stub and a failing test, then review what they write. Always their choice.
+
+| Milestone | Piece | Why |
+| --- | --- | --- |
+| 0 | Request handler in bare `http.server` | Building an HTTP response by hand |
+| 2 | SQL for filtering and sorting on the Players page | Query parameters to SQL, and why `?` placeholders are safe |
+| 3 | PIN check and lockout | Hashing and rate limiting in one small piece |
+| 7 | Rules functions and their tests | The user knows the league rules best |
+| 8 | Parsing one OnRoto table | Reading real HTML with BeautifulSoup |
+
+### End of each milestone
+
+- **Checkpoint:** the user traces one action end to end (for a bid: click, `POST`, auth, rules check, database write, SSE broadcast, other browser updates). Don't start the next milestone until they can.
+- **Learning log:** the user keeps `NOTES.md` with three lines per session: what they learned, what surprised them, what's still unclear. Read it at the start of a session and use it for review questions.
 
 ## Stack (planned)
 
