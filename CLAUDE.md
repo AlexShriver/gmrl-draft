@@ -2,19 +2,19 @@
 
 A web app for the Green Mountain Rotisserie League (GMRL) to run its annual draft remotely: a live timed auction, then the 17-round ULTRA draft. It will be hosted on this Linux machine. It replaces a paper draft, because the league's rules are too unusual for any existing draft site.
 
-- **Spec:** `SPEC.md` is a snapshot. The living doc is the source of truth: https://claude.ai/code/artifact/afea4ea0-d688-4edf-8148-728b9e08e1aa. If they disagree, ask which is current, and re-export `SPEC.md` after doc changes.
+- **Spec:** `SPEC.md` (the React single-page-app version) is the main spec and the source of truth. `SPEC-orig.md` is the archived server-rendered Jinja2 plan, kept for comparison only. The old living doc (https://claude.ai/code/artifact/afea4ea0-d688-4edf-8148-728b9e08e1aa) still describes the Jinja2 version and is out of date.
 - **Status:** planning. No application code yet. Next step: work out the detailed draft rules (see "Open questions" in the spec) before starting Milestone 0.
 
 ## How we work: this is a learning project
 
-The user (the league commissioner, also a manager) is building this mainly to learn how web servers work.
+The user (the league commissioner, also a manager) is building this mainly to learn how web servers work, and how a React frontend talks to one.
 
 - **Claude writes most of the code. The user must understand all of it.** Explain what each piece does and why, especially the HTTP-level mechanics (requests, responses, status codes, headers, cookies, SSE) that frameworks hide.
 - **Go milestone by milestone** (see "Learning roadmap" in the spec). Keep each step small enough to read in one sitting. Don't build ahead of the milestone we're on.
 - **Pause for questions** after each meaningful chunk rather than delivering a large finished feature.
 - **Offer, don't impose:** when a piece is a good one for the user to write themselves, say so and let them choose.
-- **Prefer explicit over magic:** raw SQL with `sqlite3` rather than an ORM, plain JavaScript rather than a frontend framework. Explain any new dependency before adding it.
-- **Show how to observe it:** suggest `curl -v`, `curl -N` (for SSE) or the browser's DevTools Network tab to see what's actually on the wire.
+- **Prefer explicit over magic:** raw SQL with `sqlite3` rather than an ORM; in React, plain `fetch` in a small `api.js` helper rather than React Query or Redux. Explain any new dependency (Python or npm) before adding it.
+- **Show how to observe it:** suggest `curl -v`, `curl -N` (for SSE) or the browser's DevTools Network tab to see what's actually on the wire, and the React DevTools extension for components and state.
 - **Boring over clever:** plain, readable code. Comments explain *why*, not *what*.
 
 ### The loop for every step
@@ -34,10 +34,10 @@ Give a stub and a failing test, then review what they write. Always their choice
 | Milestone | Piece | Why |
 | --- | --- | --- |
 | 0 | Request handler in bare `http.server` | Building an HTTP response by hand |
-| 2 | SQL for filtering and sorting on the Players page | Query parameters to SQL, and why `?` placeholders are safe |
-| 3 | PIN check and lockout | Hashing and rate limiting in one small piece |
-| 7 | Rules functions and their tests | The user knows the league rules best |
-| 8 | Parsing one OnRoto table | Reading real HTML with BeautifulSoup |
+| 3 | SQL for filtering and sorting on the Players page | Query parameters to SQL, and why `?` placeholders are safe |
+| 4 | PIN check and lockout | Hashing and rate limiting in one small piece |
+| 8 | Rules functions and their tests | The user knows the league rules best |
+| 9 | Parsing one OnRoto table | Reading real HTML with BeautifulSoup |
 
 ### End of each milestone
 
@@ -46,7 +46,7 @@ Give a stub and a failing test, then review what they write. Always their choice
 
 ## Stack (planned)
 
-Python 3.12+, FastAPI + Uvicorn, Jinja2 server-rendered pages, a little plain JavaScript, Server-Sent Events for live updates, SQLite with an append-only event log, `httpx` + BeautifulSoup for the OnRoto import, and systemd + Cloudflare Tunnel for hosting.
+Python 3.12+, FastAPI + Uvicorn as a JSON API (`/api/...`) that also serves the built React files, a React 18 single-page app (function components and hooks, React Router, built with Vite; Node on the dev machine only), Server-Sent Events for live updates, SQLite with an append-only event log, `httpx` + BeautifulSoup for the OnRoto import, and systemd + Cloudflare Tunnel for hosting.
 
 ## Secrets: never commit or log these
 
