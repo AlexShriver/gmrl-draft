@@ -1,10 +1,10 @@
 # GMRL Draft Site — Spec (archived: server-rendered Jinja2 version)
 
-> **Archived 2026-10-21.** This is the original plan, with server-rendered Jinja2 pages and plain JavaScript. `SPEC.md` now describes the React single-page-app version. This copy is kept for comparison and is no longer updated.
+> **Archived 2026-10-21.** This is the original plan, with server-rendered Jinja2 pages and plain JavaScript. `SPEC.md` is now the main spec and describes the React single-page-app version. This copy is kept for comparison and is no longer updated.
 >
-> Snapshot of the living spec doc, exported 2026-10-10. The doc is the source of truth:
+> Snapshot of the old living spec doc, exported 2026-10-10:
 > https://claude.ai/code/artifact/afea4ea0-d688-4edf-8148-728b9e08e1aa
-> Re-export this file when the doc changes. The doc's two diagrams don't export; they're described in words below.
+> The doc's two diagrams don't export; they're described in words below.
 
 ## Overview and goals
 

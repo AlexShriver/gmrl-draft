@@ -1,8 +1,8 @@
 # GMRL Draft Site — Spec (React version)
 
-> **Draft, 2026-10-21.** This version moves the whole frontend to a React single-page app, with FastAPI as a JSON API. It was adapted from the snapshot exported 2026-10-10, which is kept as `SPEC-jinja-server-rendered-2026-10-10.md`.
-> **Not yet in the living doc.** The living doc is still the server-rendered version: https://claude.ai/code/artifact/afea4ea0-d688-4edf-8148-728b9e08e1aa. Decide which one is current before starting Milestone 0.
-> The doc's two diagrams don't export; they're described in words below.
+> **This is the main spec and the source of truth (adopted 2026-10-22).** It moves the whole frontend to a React single-page app, with FastAPI as a JSON API. It was adapted from the server-rendered Jinja2 plan of 2026-10-10, which is archived as `SPEC-orig.md`.
+> The old living doc (https://claude.ai/code/artifact/afea4ea0-d688-4edf-8148-728b9e08e1aa) still describes the server-rendered version and is no longer current.
+> The two diagrams are described in words below.
 
 ## Overview and goals
 
